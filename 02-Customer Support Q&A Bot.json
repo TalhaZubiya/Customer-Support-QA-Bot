@@ -1,0 +1,167 @@
+{
+  "name": "Customer Support Q&A Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        208
+      ],
+      "id": "136ae78a-e0c8-42d2-ab27-817a9b9ed3ed",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        352,
+        224
+      ],
+      "id": "9a3a1616-53a7-407f-9b54-7cfcc30e5795",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        208
+      ],
+      "id": "9435ffaa-18bb-4230-af8c-2eba91de15e8",
+      "name": "Embeddings OpenAI"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "97e021fd-5b88-4867-b0e8-37a7e50c8e91",
+      "name": "Customer Query Trigger",
+      "webhookId": "2e2b6394-b7aa-419c-b0fc-8dd96d0e5c0d"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "0be6c02d-ef75-42b1-8eba-32121356604e",
+      "name": "Customer Support AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Retrieve relevant data from the Clario Knowledge Base when the user asks about its products, features, pricing, account, billing, support, or services. Use the retrieved data to answer accurately.\n",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "talhaa",
+          "mode": "list",
+          "cachedResultName": "talhaa"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        592,
+        64
+      ],
+      "id": "a176d6a1-b4b8-4969-8ebc-7ee0235aa326",
+      "name": "Knowledge Base Search"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Customer Support AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Customer Support AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Knowledge Base Search",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Query Trigger": {
+      "main": [
+        [
+          {
+            "node": "Customer Support AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Customer Support AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a0e64caf-9cae-458f-88f5-5b099b2ebd33",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f148218dc3e81c9a8a85f70e397393fb4f6a2ab7d1f0c2483d00cbdc9c4ea583"
+  },
+  "nodeGroups": [],
+  "id": "rmZev4oJxO5wn3gn",
+  "tags": []
+}
