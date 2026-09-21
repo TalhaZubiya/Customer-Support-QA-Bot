@@ -27,37 +27,19 @@ The workflow combines:
 
 The fictional SaaS company used in this project is **Clario**, with **Clario Workspace** as its product.
 
-
 ---
 
 ## How It Works
 
-Customer
-   │
-   ▼
-Chat Interface
-   │
-   ▼
-Customer Support AI Agent
-   │
-   ├──────────────► Conversation Memory
-   │
-   ▼
-Knowledge Base Search
-   │
-   ▼
-Pinecone Vector Database
-   │
-   ▼
-Relevant Knowledge
-   │
-   ▼
-AI Agent
-   │
-   ▼
-Customer Response
+The system consists of two main workflows:
 
-The knowledge base is converted into embeddings and stored in Pinecone. When a customer asks a question, the AI Agent retrieves relevant information from the knowledge base and generates a response using the retrieved context.
+1. Knowledge Base Ingestion
+
+   The knowledge base is collected from Google Drive, processed into documents, converted into embeddings using OpenAI, and stored in Pinecone for semantic search.
+
+2. Customer Support & Q&A
+
+   When a customer submits a query, the AI Support Agent uses the chat model, conversation memory, and Pinecone knowledge base to retrieve relevant information and generate a response.
 
 ---
 
@@ -69,7 +51,7 @@ Answers customer questions using an AI Agent connected to a company knowledge ba
 
 ### RAG Knowledge Retrieval
 
-Retrieves relevant information from the knowledge base before generating an answer.
+Retrieves relevant information from the knowledge base before generating a response.
 
 ### Vector Search
 
@@ -118,55 +100,29 @@ The knowledge base covers realistic SaaS topics such as:
 
 ## Project Architecture
 
-The project contains two main workflows.
+```text
+Customer Support Q&A Bot
 
-### 1. Knowledge Base Ingestion
-
-Google Drive
-     │
-     ▼
-New Document Trigger
-     │
-     ▼
-Download Knowledge File
-     │
-     ▼
-Document Loader
-     │
-     ▼
-OpenAI Embeddings
-     │
-     ▼
-Pinecone
-
-This workflow prepares company knowledge for semantic retrieval.
-
-### 2. Customer Support Q&A
-
-Customer Query
-     │
-     ▼
-Chat Trigger
-     │
-     ▼
-AI Agent
-     │
-     ├──► Conversation Memory
-     │
-     └──► Knowledge Base Search
-                 │
-                 ▼
-              Pinecone
-                 │
-                 ▼
-          Relevant Information
-                 │
-                 ▼
-              AI Agent
-                 │
-                 ▼
-          Customer Response
-
+├── Flow 1: Knowledge Base Ingestion
+│   Google Drive
+│      ↓
+│   Download File
+│      ↓
+│   Load Document
+│      ↓
+│   OpenAI Embeddings
+│      ↓
+│   Pinecone Vector Store
+│
+└── Flow 2: Customer Support & Q&A
+    Customer Query
+        ↓
+    AI Support Agent
+      ↙   ↓   ↘
+   Chat   Memory   Knowledge Base
+   Model              ↓
+                    Pinecone
+```
 ---
 
 ## Knowledge Base
@@ -196,25 +152,6 @@ This allows the chatbot to simulate a realistic SaaS customer support environmen
 
 ---
 
-## Example Questions
-
-The chatbot can answer questions such as:
-
-- How do I create a Clario account?
-- How can I reset my password?
-- How do I invite a team member?
-- What are the different user roles?
-- What subscription plans does Clario offer?
-- How can I upgrade my subscription?
-- How do I cancel my subscription?
-- What integrations does Clario support?
-- Why didn't my automation run?
-- Where can I find my invoices?
-- Can I export my customer data?
-- How can I contact Clario Support?
-
----
-
 ## AI Response Policy
 
 The AI Agent is designed to prioritize information retrieved from the Clario Knowledge Base.
@@ -226,25 +163,6 @@ It should:
 - Avoid claiming that an action was completed unless a connected tool actually performed it.
 - Provide accurate and concise customer support responses.
 - Escalate questions when the available knowledge is insufficient.
-
----
-
-## Repository Structure
-
-Customer-Support-QA-Bot/
-│
-├── workflows/
-│   ├── Customer-Support-QA-Bot.json
-│   └── Customer-Support-QA-Bot-Part-1.json
-│
-├── knowledge-base/
-│   └── Clario-Customer-Support-Knowledge-Base.pdf
-│
-├── screenshots/
-│   ├── chatbot.png
-│   └── n8n-workflow.png
-│
-└── README.md
 
 ---
 
